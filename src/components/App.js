@@ -5,7 +5,7 @@ import AppHeader from './app-header'
 import SearchPanel from './search-panel'
 import ItemStatusFilter from './item-status-filter'
 import TodoList from './todo-list'
-import AddItem from './add-item'
+import AddItemForm from './add-item-form'
 
 export default class App extends Component {
   maxId = 100
@@ -92,7 +92,7 @@ export default class App extends Component {
                   onDeleted= { this.deleteTodo }
                   onToggleDone= { this.toggleDoneHandler }
                   onToggleImportant= { this.toggleImportantHandler } />
-        <AddItem addItemHandler={ this.addItemHandler } />
+        <AddItemForm addItemHandler={ this.addItemHandler } />
       </div>
     );
   }
