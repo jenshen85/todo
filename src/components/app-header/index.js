@@ -1,1 +1,3 @@
-export * from './app-header';
+import AppHeader from './app-header';
+
+export default AppHeader;
