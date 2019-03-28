@@ -40,7 +40,6 @@ export default class AddItemForm extends Component {
                     '' : 'is-invalid'}
                     form-control add-item-form-control`
                   }
-                // className='form-control add-item-form-control'
                 placeholder='Whats needs to be done'
                 onChange={ this.onInputHandler }
                 value={ this.state.label } />
