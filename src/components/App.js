@@ -14,7 +14,8 @@ export default class App extends Component {
       this.createTodoItem('Drink Coffee'),
       this.createTodoItem('Build React App'),
       this.createTodoItem('Do Someting'),
-    ]
+    ],
+    term: ''
   }
 
   createTodoItem(label) {
@@ -77,18 +78,31 @@ export default class App extends Component {
     })
   }
 
+  searchTodoHandler = (todoData, term) => {
+    if(term.length === 0) return todoData
+    const patern = new RegExp(term, 'gi')
+    return todoData.filter((todo) => todo.label.search(patern) !== -1 )
+  }
+
+  setTermHandler = (ev) => {
+    this.setState({ term: ev.target.value })
+  }
+
   render() {
-    const { todoData } = this.state
+    const { todoData, term } = this.state
+
+    const filteredTodo = this.searchTodoHandler(todoData, term)
+
     const todoDoneCount = todoData.filter(el => el.done).length
     const todoCount = todoData.length - todoDoneCount
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={todoDoneCount} />
         <div className="top-panel d-flex flex-column">
-          <SearchPanel />
+          <SearchPanel setTermHandler={ this.setTermHandler } />
           <ItemStatusFilter />
         </div>
-        <TodoList todos={ todoData }
+        <TodoList todos={ filteredTodo }
                   onDeleted= { this.deleteTodo }
                   onToggleDone= { this.toggleDoneHandler }
                   onToggleImportant= { this.toggleImportantHandler } />
