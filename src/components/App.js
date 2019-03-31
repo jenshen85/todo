@@ -15,7 +15,8 @@ export default class App extends Component {
       this.createTodoItem('Build React App'),
       this.createTodoItem('Do Someting'),
     ],
-    term: ''
+    term: '',
+    filter: 'all',
   }
 
   createTodoItem(label) {
@@ -78,7 +79,7 @@ export default class App extends Component {
     })
   }
 
-  searchTodoHandler = (todoData, term) => {
+  search = (todoData, term) => {
     if(term.length === 0) return todoData
     const patern = new RegExp(term, 'gi')
     return todoData.filter((todo) => todo.label.search(patern) !== -1 )
@@ -88,19 +89,38 @@ export default class App extends Component {
     this.setState({ term: ev.target.value })
   }
 
+  filter = (items, filter) => {
+    switch(filter) {
+      case 'all':
+        return items
+      case 'active':
+        return items.filter((item) => !item.done)
+      case 'done':
+        return items.filter((item) => item.done)
+      default:
+        return items
+    }
+  }
+
+  onFilterChange = (filter) => {
+    this.setState({ filter })
+  }
+
   render() {
-    const { todoData, term } = this.state
-
-    const filteredTodo = this.searchTodoHandler(todoData, term)
-
-    const todoDoneCount = todoData.filter(el => el.done).length
+    const { todoData, term, filter } = this.state
+    const filteredTodo = this.filter(this.search(todoData, term), filter)
+    const todoDone = todoData.filter(el => el.done)
+    const todoDoneCount = todoDone.length
     const todoCount = todoData.length - todoDoneCount
+
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={todoDoneCount} />
         <div className="top-panel d-flex flex-column">
           <SearchPanel setTermHandler={ this.setTermHandler } />
-          <ItemStatusFilter />
+          <ItemStatusFilter
+            onFilterChange={ this.onFilterChange }
+            filter={ filter } />
         </div>
         <TodoList todos={ filteredTodo }
                   onDeleted= { this.deleteTodo }
